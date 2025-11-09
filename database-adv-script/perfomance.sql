@@ -11,34 +11,23 @@
 -- Purpose: Provide a complete booking overview for admins or analytics
 -- Potential Issue: Multiple JOINs can cause performance lag if not indexed properly
 
-SELECT 
-    b.booking_id,
+SELECT
+    b.id AS booking_id,
     b.start_date,
     b.end_date,
-    b.total_price,
-    b.status,
-    u.user_id,
+    u.id AS user_id,
     u.first_name,
     u.last_name,
-    u.email,
-    p.property_id,
+    p.id AS property_id,
     p.name AS property_name,
-    p.location,
-    p.pricepernight,
-    pay.payment_id,
+    pay.id AS payment_id,
     pay.amount,
-    pay.status AS payment_status,
-    pay.payment_date
-FROM 
-    Bookings b
-JOIN 
-    Users u ON b.user_id = u.user_id
-JOIN 
-    Properties p ON b.property_id = p.property_id
-LEFT JOIN 
-    Payments pay ON b.booking_id = pay.booking_id
-ORDER BY 
-    b.created_at DESC;
+    pay.status
+FROM bookings AS b
+JOIN users AS u ON b.user_id = u.id
+JOIN properties AS p ON b.property_id = p.id
+JOIN payments AS pay ON b.payment_id = pay.id
+WHERE b.status = 'confirmed' AND pay.status = 'completed';
 
 -- =============================================
 -- Step 2: Analyze Performance
