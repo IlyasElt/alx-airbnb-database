@@ -86,21 +86,6 @@ SELECT Users.*, Bookings.* FROM Users RIGHT JOIN Bookings ON Users.user_id = Boo
 - Access to the airbnb_clone database
 - Tables created from previous schema definition
 
-### Execution
-```bash
-# Connect to MySQL
-mysql -u your_username -p
-
-# Select database
-USE airbnb_clone;
-
-# Run the queries file
-source joins_queries.sql;
-
-# Or run directly
-mysql -u your_username -p airbnb_clone < joins_queries.sql
-```
-
 ---
 
 ## Key Learnings
@@ -117,4 +102,61 @@ mysql -u your_username -p airbnb_clone < joins_queries.sql
 
 ## Files
 - `joins_queries.sql` - Contains all three join queries with detailed comments
-- `README.md` - This documentation file
+
+# Task 1: SQL Subqueries
+
+## Objective
+Master both correlated and non-correlated subqueries to perform complex data retrieval and analysis in the Airbnb database.
+
+---
+
+## What are Subqueries?
+
+A **subquery** is a query nested inside another query. They allow you to:
+- Break complex problems into smaller steps
+- Use the result of one query as input to another
+- Perform calculations and filtering based on aggregate data
+
+---
+
+## Types of Subqueries
+
+### 1. Non-Correlated Subquery (Independent)
+- The inner query executes **once**
+- Returns a result that the outer query uses
+- Can be run independently
+- Generally faster than correlated subqueries
+
+**Example:** "Find all properties where average rating > 4.0"
+- Step 1: Calculate average ratings (inner query runs once)
+- Step 2: Filter properties (outer query uses those results)
+
+---
+
+### 2. Correlated Subquery (Dependent)
+- The inner query executes **for each row** of the outer query
+- References columns from the outer query
+- Cannot be run independently
+- Generally slower but more flexible
+
+**Example:** "Find users with more than 3 bookings"
+- For each user, count their bookings (inner query runs N times)
+- Filter based on that count
+
+---
+
+## Key Differences
+
+| Feature | Non-Correlated | Correlated |
+|---------|---------------|------------|
+| **Execution** | Runs once | Runs per row |
+| **Independence** | Can run alone | Needs outer query |
+| **Performance** | Usually faster | Usually slower |
+| **Complexity** | Simpler | More flexible |
+| **Use When** | Simple filtering | Row-by-row comparison |
+
+---
+
+## Files
+- `subqueries.sql` - All subquery implementations with comments
+
