@@ -30,7 +30,7 @@ ORDER BY
 
 
 -- =============================================
--- Query 2: WINDOW FUNCTION with ROW_NUMBER
+-- Query 2a: WINDOW FUNCTION with ROW_NUMBER
 -- Rank properties by total bookings (unique ranks)
 -- =============================================
 
@@ -61,3 +61,34 @@ FROM (
 ORDER BY 
     row_number_rank;
 
+-- =============================================
+-- Query 2b: WINDOW FUNCTION with RANK
+-- Rank properties by total bookings (allows ties)
+-- =============================================
+
+SELECT 
+    property_id,
+    name AS property_name,
+    location,
+    pricepernight,
+    total_bookings,
+    RANK() OVER (ORDER BY total_bookings DESC) AS rank_position
+FROM (
+    SELECT 
+        Properties.property_id,
+        Properties.name,
+        Properties.location,
+        Properties.pricepernight,
+        COUNT(Bookings.booking_id) AS total_bookings
+    FROM 
+        Properties
+    LEFT JOIN 
+        Bookings ON Properties.property_id = Bookings.property_id
+    GROUP BY 
+        Properties.property_id,
+        Properties.name,
+        Properties.location,
+        Properties.pricepernight
+) AS property_booking_counts
+ORDER BY 
+    rank_position;
