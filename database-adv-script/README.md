@@ -160,3 +160,72 @@ A **subquery** is a query nested inside another query. They allow you to:
 ## Files
 - `subqueries.sql` - All subquery implementations with comments
 
+# Task 2: Aggregations and Window Functions
+
+## Objective
+Use SQL aggregation functions (COUNT, GROUP BY) and window functions (ROW_NUMBER, RANK) to analyze booking data.
+
+---
+
+## Queries
+
+### Query 1: Total Bookings Per User
+**Purpose:** Count how many bookings each user has made
+
+**Key Functions:**
+- `COUNT()` - Counts the number of bookings
+- `GROUP BY` - Groups results by each user
+- `LEFT JOIN` - Includes users with 0 bookings
+
+**Use Case:** 
+- Identify most active users
+- VIP program eligibility
+- User engagement metrics
+
+---
+
+### Query 2: Rank Properties by Popularity
+**Purpose:** Rank properties based on total number of bookings
+
+**Two Versions:**
+
+**ROW_NUMBER:**
+- Assigns unique sequential numbers (1, 2, 3, 4...)
+- No ties - each property gets different rank
+
+**RANK:**
+- Allows ties for properties with same booking count
+- Skips numbers after ties (1, 2, 2, 4...)
+
+**Use Case:**
+- Featured "Most Popular" properties section
+- Property performance dashboard
+- Host analytics
+
+---
+
+## Key Differences
+
+| Feature | COUNT + GROUP BY | Window Function |
+|---------|------------------|-----------------|
+| **Groups data?** | Yes | No |
+| **Loses detail?** | Some columns | Keeps all columns |
+| **Adds ranking?** | No | Yes |
+| **Use for** | Totals, sums, averages | Rankings, row numbers |
+
+**Simple explanation:**
+- **GROUP BY** = Collapse rows together, calculate totals
+- **Window Function** = Keep all rows, just add a rank column
+
+---
+
+## Expected Results
+
+**Query 1:** Shows each user with their booking count (highest first)
+
+**Query 2:** Shows all properties ranked by popularity
+
+---
+
+## Files
+- `aggregations_and_window_functions.sql` - All queries
