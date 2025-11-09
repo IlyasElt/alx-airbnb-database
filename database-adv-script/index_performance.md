@@ -29,13 +29,13 @@
 
 **Before Index:**
 ```sql
-EXPLAIN SELECT * FROM Properties WHERE location = 'California';
+EXPLAIN ANALYZE SELECT * FROM Properties WHERE location = 'California';
 ```
 Result: type=ALL, rows=1000 (full table scan)
 
 **After Index:**
 ```sql
-EXPLAIN SELECT * FROM Properties WHERE location = 'California';
+EXPLAIN ANALYZE SELECT * FROM Properties WHERE location = 'California';
 ```
 Result: type=ref, rows=50, key=idx_properties_location
 
@@ -47,13 +47,13 @@ Result: type=ref, rows=50, key=idx_properties_location
 
 **Before Index:**
 ```sql
-EXPLAIN SELECT * FROM Users WHERE email = 'user@example.com';
+EXPLAIN ANALYZE SELECT * FROM Users WHERE email = 'user@example.com';
 ```
 Result: type=ALL, rows=500 (full table scan)
 
 **After Index:**
 ```sql
-EXPLAIN SELECT * FROM Users WHERE email = 'user@example.com';
+EXPLAIN ANALYZE SELECT * FROM Users WHERE email = 'user@example.com';
 ```
 Result: type=ref, rows=1, key=idx_users_email
 
@@ -65,21 +65,15 @@ Result: type=ref, rows=1, key=idx_users_email
 
 **Before Index:**
 ```sql
-EXPLAIN SELECT * FROM Bookings 
-WHERE property_id = 'abc123' 
-AND start_date <= '2025-12-31' 
-AND end_date >= '2025-12-01';
+EXPLAIN ANALYZE SELECT * FROM Bookings WHERE property_id = 'abc123';
 ```
 Result: type=ALL, rows=5000 (full table scan)
 
 **After Index:**
 ```sql
-EXPLAIN SELECT * FROM Bookings 
-WHERE property_id = 'abc123' 
-AND start_date <= '2025-12-31' 
-AND end_date >= '2025-12-01';
+EXPLAIN ANALYZE SELECT * FROM Bookings WHERE property_id = 'abc123';
 ```
-Result: type=range, rows=10, key=idx_bookings_dates
+Result: type=ref, rows=10, key=idx_bookings_property_id
 
 **Improvement:** Reduced rows scanned from 5000 to 10 (500x faster)
 
@@ -91,6 +85,6 @@ Result: type=range, rows=10, key=idx_bookings_dates
 |-------|---------------|--------------|-------------|
 | Property by location | 1000 | 50 | 20x |
 | User login | 500 | 1 | 500x |
-| Booking availability | 5000 | 10 | 500x |
+| Booking by property | 5000 | 10 | 500x |
 
 Indexes significantly improve query performance by reducing the number of rows scanned.
